@@ -1,4 +1,4 @@
-﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EjemploLogin</RootNamespace>
     <AssemblyName>EjemploLogin</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
@@ -23,6 +23,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,10 +51,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -67,7 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CapaPresentacion\CP_usuario.aspx" />
+    <Content Include="CapaPresentacion\Asignaciones.aspx" />
+    <Content Include="CapaPresentacion\DetallesReparacion.aspx" />
+    <Content Include="CapaPresentacion\Equipos.aspx" />
+    <Content Include="CapaPresentacion\Reparaciones.aspx" />
+    <Content Include="CapaPresentacion\Tecnicos.aspx" />
+    <Content Include="CapaPresentacion\Usuarios.aspx" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\bootstrap\mixins\_border-radius.css" />
     <Content Include="css\bootstrap\mixins\_reset-text.css" />
@@ -76,9 +78,10 @@
     <Content Include="css\bootstrap\mixins\_visibility.css" />
     <Content Include="css\bootstrap\utilities\_stretched-link.css" />
     <Content Include="css\bootstrap\_media.css" />
+    <Content Include="css\dashboard.css" />
+    <Content Include="css\modules.css" />
     <Content Include="css\style.css" />
-    <Content Include="images\bg.jpg" />
-    <Content Include="inicio.aspx" />
+    <Content Include="images\fondo.jpg" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\main.js" />
@@ -88,23 +91,62 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CapaDatos\CD_Asignacion.cs" />
+    <Compile Include="CapaDatos\CD_DetalleReparacion.cs" />
     <Compile Include="CapaDatos\CD_Equipo.cs" />
+    <Compile Include="CapaDatos\CD_Reparacion.cs" />
+    <Compile Include="CapaDatos\CD_Tecnico.cs" />
     <Compile Include="CapaDatos\CD_USuario.cs" />
+    <Compile Include="CapaDatos\CD_UsuarioExamen.cs" />
+    <Compile Include="CapaDatos\Conexion.cs" />
+    <Compile Include="CapaLogica\CL_Asignacion.cs" />
+    <Compile Include="CapaLogica\CL_DetalleReparacion.cs" />
+    <Compile Include="CapaLogica\CL_Equipo.cs" />
+    <Compile Include="CapaLogica\CL_Reparacion.cs" />
+    <Compile Include="CapaLogica\CL_Tecnico.cs" />
     <Compile Include="CapaLogica\CL_usuario.cs" />
-    <Compile Include="CapaPresentacion\Cl_Equipos.cs" />
-    <Compile Include="CapaPresentacion\CP_usuario.aspx.cs">
-      <DependentUpon>CP_usuario.aspx</DependentUpon>
+    <Compile Include="CapaLogica\CL_UsuarioExamen.cs" />
+    <Compile Include="CapaPresentacion\Asignaciones.aspx.cs">
+      <DependentUpon>Asignaciones.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CapaPresentacion\CP_usuario.aspx.designer.cs">
-      <DependentUpon>CP_usuario.aspx</DependentUpon>
+    <Compile Include="CapaPresentacion\Asignaciones.aspx.designer.cs">
+      <DependentUpon>Asignaciones.aspx</DependentUpon>
     </Compile>
-    <Compile Include="inicio.aspx.cs">
-      <DependentUpon>inicio.aspx</DependentUpon>
+    <Compile Include="CapaPresentacion\DetallesReparacion.aspx.cs">
+      <DependentUpon>DetallesReparacion.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="inicio.aspx.designer.cs">
-      <DependentUpon>inicio.aspx</DependentUpon>
+    <Compile Include="CapaPresentacion\DetallesReparacion.aspx.designer.cs">
+      <DependentUpon>DetallesReparacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CapaPresentacion\Equipos.aspx.cs">
+      <DependentUpon>Equipos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CapaPresentacion\Equipos.aspx.designer.cs">
+      <DependentUpon>Equipos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CapaPresentacion\Reparaciones.aspx.cs">
+      <DependentUpon>Reparaciones.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CapaPresentacion\Reparaciones.aspx.designer.cs">
+      <DependentUpon>Reparaciones.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CapaPresentacion\Tecnicos.aspx.cs">
+      <DependentUpon>Tecnicos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CapaPresentacion\Tecnicos.aspx.designer.cs">
+      <DependentUpon>Tecnicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CapaPresentacion\Usuarios.aspx.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CapaPresentacion\Usuarios.aspx.designer.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
@@ -257,7 +299,7 @@
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauraci�n de paquetes NuGet para descargarlos. Para obtener m�s informaci�n, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>

@@ -1,83 +1,84 @@
 ﻿using EjemploLogin.CapaDatos;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace EjemploLogin.CapaLogica
 {
+
     public class CL_usuario
     {
 
-       public static int ValidarUsuario(string usuario, string clave)
+        /// Valida las credenciales de un usuario para permitir el acceso al sistema
+        public static int ValidarUsuario(string correo, string clave)
         {
-
-            CD_USuario.usuario = usuario;
+            // Guardar credenciales en la clase estática CD_USuario para mantener la sesión
+            CD_USuario.usuario = correo;
             CD_USuario.clave = clave;
 
-            int existe = 0;
+            int existe = 0; // Variable que indica si el usuario existe (1) o no (0)
 
             try
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
-
-                using (SqlConnection conexion = new SqlConnection(connectionString))
-                using (SqlCommand comando = new SqlCommand("SELECT correo, clave, nombre FROM usuario WHERE correo = @correo AND clave = @clave", conexion))
+                using (SqlConnection c = Conexion.Conectar())
+                using (SqlCommand comando = new SqlCommand(
+                    "SELECT nombre FROM UsuariosPasswords WHERE correo = @correo AND clave = @clave",
+                    c))
                 {
-                    // Usar parámetros evita inyección SQL
-                    comando.Parameters.AddWithValue("@correo", CD_USuario.usuario);
-                    comando.Parameters.AddWithValue("@clave", CD_USuario.clave);
+                    comando.Parameters.AddWithValue("@correo", correo);
+                    comando.Parameters.AddWithValue("@clave", clave);
 
-                    conexion.Open();
-                    using (SqlDataReader registro = comando.ExecuteReader())
+                    c.Open();
+                    SqlDataReader registro = comando.ExecuteReader();
+
+                    // Si se encontró un registro, el usuario existe y las credenciales son correctas
+                    if (registro.Read())
                     {
-                        if (registro.Read())
-                        {
-                            CD_USuario.nombre = registro["nombre"].ToString();
-                            existe = 1;
-                        }
-
+                        // Guardar el nombre del usuario en la sesión
+                        CD_USuario.nombre = registro["nombre"].ToString();
+                        existe = 1; // Marcar como existente
                     }
                 }
             }
             catch (Exception)
             {
-
+                // En caso de error (BD no disponible, etc.), marcar como no existente
                 existe = 0;
             }
-            
+
             return existe;
         }
-        
 
-        public int AgregarUsuario(string usuario, string clave)
+
+        /// Registra un nuevo usuario en el sistema de autenticación
+        public int AgregarUsuario(string correo, string clave, string nombre)
         {
-            int existe = 0;
+            int resultado = 0; // Variable que indica el resultado de la operación
 
             try
             {
-                String s = System.Configuration.ConfigurationManager.ConnectionStrings["conexion"].ConnectionString;
-                SqlConnection conexion = new SqlConnection(s);
-                conexion.Open();
-                SqlCommand comando = new SqlCommand(" INSERT INTO usuario VALUES('" + usuario + "', '" + clave + "')", conexion);
-                comando.ExecuteNonQuery();
-                conexion.Close();
-                existe = 1;
+                using (SqlConnection c = Conexion.Conectar())
+                using (SqlCommand comando = new SqlCommand(
+                    "INSERT INTO UsuariosPasswords(correo, clave, nombre) VALUES(@correo, @clave, @nombre)",
+                    c))
+                {
+                    comando.Parameters.AddWithValue("@correo", correo);
+                    comando.Parameters.AddWithValue("@clave", clave);
+                    comando.Parameters.AddWithValue("@nombre", nombre);
+
+                    c.Open();
+                    comando.ExecuteNonQuery();
+                }
+
+                resultado = 1;
             }
             catch (Exception)
-            { 
-               existe = 0;
+            {
+                // En caso de error (correo duplicado, BD no disponible, etc.)
+                resultado = 0;
             }
-           
-            return existe;
-        }
 
-        public void EliminarUsuario(int usuarioID)
-        {
-            // Lógica para eliminar un usuario (simulada)
-            // Aquí se podría eliminar el usuario de una base de datos
+            return resultado;
         }
     }
 }
